@@ -10,7 +10,53 @@
 }
 
 .container {
-  max-width: 1440px;
+  max-width: 1000px;
   min-height: 900px;
   margin: 0 auto;
+  padding: 20px;
 }
+
+.textarea {
+  width: 100%;
+  resize: none;
+}
+
+.keyboard{
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 5px;
+  width: 100%;
+ // width: 300px;
+  height: 300px;
+}
+
+.key {
+  padding-top: 20%;
+  text-align: center;
+  font-size: 1rem;
+  background: mediumturquoise;
+  cursor: pointer;
+
+  &--wide{
+    grid-column: span 2;
+  }
+  &--space{
+    grid-column: span 6;
+  }
+
+}
+
+.keydown{
+  background-color: mediumvioletred;
+}
+
+.capslock {
+  background-color: green;
+}
+
+.shift {
+  background-color: green;
+}
+
+
