@@ -90,6 +90,14 @@ if (shiftOn){
 }
 }
 
+function changeLang(){
+  if ( document.querySelector('[data-key=Lang]').innerHTML === "En"){
+    changeKeys(replacerRu);
+   } else  {
+    changeKeys(replacerEn);
+   }
+}
+
 function resetSpecialKey(){
     changeShift(0);
     document.querySelector('[data-key=ControlLeft]').classList.remove('ctrl');
@@ -102,18 +110,17 @@ function resetSpecialKey(){
 
 container.append(keyboard);
 
-//changeKeys(replacerRu);
-
 
 let capsLock = document.querySelector('[data-key=CapsLock]');
 
 
 keyboard.addEventListener("mousedown", function () {
  if(event.target.dataset.key){
-    //let dataset = Number(event.target.dataset.key);
+    
     let a = document.querySelector('[data-key='+event.target.dataset.key+']');
+    let flag;// = false;
     a.classList.add('keydown');
-   // keyPress(37);
+   
    if(event.target.innerHTML === "Backspace"){
     
     textarea.value=textarea.value.substring(0,textarea.value.length -1);
@@ -127,13 +134,16 @@ keyboard.addEventListener("mousedown", function () {
     textarea.value += '\n';
     resetSpecialKey()
   }else if (event.target.innerHTML === "CapsLock"){
-    //capsLock = !capsLock;
+  
     a.classList.toggle('capslock');
     resetSpecialKey()
    }else if (event.target.innerHTML === "Shift"){
-    //capsLock = !capsLock;
+    if (document.querySelector('[data-key=ControlLeft]').classList.contains('ctrl') || document.querySelector('[data-key=ControlRight]').classList.contains('ctrl')
+    || document.querySelector('[data-key=AltLeft]').classList.contains('alt') || document.querySelector('[data-key=AltRight]').classList.contains('alt')){
+      resetSpecialKey();
+    } else {
     a.classList.toggle('shift');
-    changeShift(a.classList.contains('shift'));
+    changeShift(a.classList.contains('shift'));}
    }else if (event.target.innerHTML === "En"){
     changeKeys(replacerRu);
     resetSpecialKey()
@@ -141,14 +151,30 @@ keyboard.addEventListener("mousedown", function () {
     changeKeys(replacerEn);
     resetSpecialKey()
    }else if (event.target.innerHTML === "Alt"){
-    //capsLock = !capsLock;
-    a.classList.toggle('alt');
-    resetSpecialKey()
+    if (document.querySelector('[data-key=ShiftLeft]').classList.contains('shift') || document.querySelector('[data-key=ShiftRight]').classList.contains('shift')){
+      resetSpecialKey();
+    } else if (document.querySelector('[data-key=ControlLeft]').classList.contains('ctrl') || document.querySelector('[data-key=ControlRight]').classList.contains('ctrl')){
+      changeLang();
+      resetSpecialKey();
+    } else{
+      a.classList.toggle('alt');
+    }
+    //a.classList.toggle('alt');
+   // resetSpecialKey()
    }
    else if (event.target.innerHTML === "Ctrl"){
-    //capsLock = !capsLock;
-    a.classList.toggle('ctrl');
-    resetSpecialKey()
+
+    if (document.querySelector('[data-key=ShiftLeft]').classList.contains('shift') || document.querySelector('[data-key=ShiftRight]').classList.contains('shift')){
+      resetSpecialKey();
+    } else if (document.querySelector('[data-key=AltLeft]').classList.contains('alt') || document.querySelector('[data-key=AltRight]').classList.contains('alt')){
+      changeLang();
+      resetSpecialKey();
+    } else{
+      a.classList.toggle('ctrl');
+    }
+ 
+    //a.classList.toggle('ctrl');
+    //resetSpecialKey()
    }else
    
    if(capsLock.classList.contains('capslock')){
