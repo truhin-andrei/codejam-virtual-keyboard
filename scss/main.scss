@@ -28,14 +28,14 @@
   grid-template-rows: repeat(5, 1fr);
   gap: 5px;
   width: 100%;
- // width: 300px;
   height: 300px;
 }
 
 .key {
-  padding-top: 20%;
+  padding-top: 10px;
   text-align: center;
   font-size: 1rem;
+  line-height: 100%;
   border-radius: 5px;
   background: mediumturquoise;
   cursor: pointer;
@@ -49,18 +49,9 @@
 
 }
 
-@keyframes press {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(0.7);
-  }
-}
-
 .keydown{
   background-color: mediumvioletred;
-  animation: press 2s ease-in-out;
+  transform: scale(0.85);
 }
 
 .capslock {
@@ -81,13 +72,5 @@
 
 
 
-
-// .key--animated{
-  
-//   }
-
-// .keyup{
-
-// }
 
 
