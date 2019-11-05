@@ -137,6 +137,7 @@ keyboard.addEventListener("mousedown", function () {
     let a = document.querySelector('[data-key='+event.target.dataset.key+']');
     let flag;// = false;
     a.classList.add('keydown');
+    //a.classList.add('key--animated');
    
    if(event.target.innerHTML === "Backspace"){
     
