@@ -55,6 +55,7 @@ let doubleKeys = new Set();
 let keyboard = document.createElement('div');
 keyboard.className = "keyboard";
 
+
 for (item in keys) {
   let key = document.createElement('div');
   key.className = "key";
@@ -68,6 +69,11 @@ for (item in keys) {
   key.dataset.key = item;
   keyboard.append(key);
 };
+
+container.append(keyboard);
+
+
+let capsLock = document.querySelector('[data-key=CapsLock]');
 
 function changeKeys(obj){
   for (item in obj) {
@@ -110,8 +116,10 @@ if (shiftOn){
 function changeLang(){
   if ( document.querySelector('[data-key=Lang]').innerHTML === "En"){
     changeKeys(replacerRu);
+    localStorage.Lang = "Ru";
    } else  {
     changeKeys(replacerEn);
+    localStorage.Lang = "En";
    }
 }
 
@@ -124,11 +132,10 @@ function resetSpecialKey(){
   
 }
 
+if  (localStorage.Lang == "Ru"){
+  changeLang();
+}
 
-container.append(keyboard);
-
-
-let capsLock = document.querySelector('[data-key=CapsLock]');
 
 
 keyboard.addEventListener("mousedown", function () {
@@ -163,10 +170,12 @@ keyboard.addEventListener("mousedown", function () {
     a.classList.toggle('shift');
     changeShift(a.classList.contains('shift'));}
    }else if (event.target.innerHTML === "En"){
-    changeKeys(replacerRu);
+    //changeKeys(replacerRu);
+    changeLang();
     resetSpecialKey()
    }else if (event.target.innerHTML === "Ру"){
-    changeKeys(replacerEn);
+   // changeKeys(replacerEn);
+   changeLang();
     resetSpecialKey()
    }else if (event.target.innerHTML === "Alt"){
     if (document.querySelector('[data-key=ShiftLeft]').classList.contains('shift') || document.querySelector('[data-key=ShiftRight]').classList.contains('shift')){
