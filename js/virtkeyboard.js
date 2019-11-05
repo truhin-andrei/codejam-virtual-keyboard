@@ -34,6 +34,23 @@ const replacerEn = {
   "KeyN":"n" , "KeyM":"m"  , "Comma":"," , "Period":"." , "Slash":"/", 'Lang': 'En'
 }; 
 
+const replacerRu2 = {
+  "81":"й", "87":"ц"  , "69":"у" , "82":"к" , "84":"е", "89":"н", "85":"г", 
+  "73":"ш", "79":"щ", "80":"з" , "BracketLeft":"х" , "BracketRight":"ъ", "KeyA":"ф", "KeyS":"ы", 
+  "KeyD":"в" , "KeyF":"а"  , "KeyG":"п" , "KeyH":"р" , "KeyJ":"о", "KeyK":"л", "KeyL":"д", 
+  "Semicolon":"ж" , "Quote":"э"  , "KeyZ":"я", "KeyX":"ч", "KeyC":"с", "KeyV":"м", "KeyB":"и", 
+  "KeyN":"т" , "KeyM":"ь"  , "Comma":"б" , "Period":"ю" , "Slash":".", 'Lang': 'Ру'
+}; 
+const replacerEn2 = {
+  "81":"q", "87":"w"  , "69":"e" , "82":"r" , "84":"t", "89":"y", "85":"u", 
+  "73":"i", "79":"o", "80":"p" , "BracketLeft":"[" , "BracketRight":"]", "KeyA":"a", "KeyS":"s", 
+  "KeyD":"d" , "KeyF":"f"  , "KeyG":"g" , "KeyH":"h" , "KeyJ":"j", "KeyK":"k", "KeyL":"l", 
+  "Semicolon":";" , "Quote":"'"  , "KeyZ":"z", "KeyX":"x", "KeyC":"c", "KeyV":"v", "KeyB":"b", 
+  "KeyN":"n" , "KeyM":"m"  , "Comma":"," , "Period":"." , "Slash":"/", 'Lang': 'En'
+}; 
+
+
+
 
 let keyboard = document.createElement('div');
 keyboard.className = "keyboard";
@@ -196,53 +213,72 @@ keyboard.addEventListener("mouseup", function () {
      }
 
 });
+let newCode ;
+document.addEventListener("keydown", function() {
+  let newKey = event.key;
+  //let newCode = 0;
+  newCode = String (event.keyCode);
+  console.log(newCode);
 
-document.addEventListener('keydown', function() {
-  
-  if (event.code  ) {
+  if (event.code) {
     textarea.focus();
-    let a = document.querySelector('[data-key='+event.code+']');
-    //console.log(event.code);
-    a.classList.add('keydown');
-    if (event.code == "Tab"){
+    let a = document.querySelector("[data-key=" + event.code + "]");
+    
+    a.classList.add("keydown");
+    if (event.code == "Tab") {
       event.preventDefault();
-      textarea.value += '    ';
-     }else if (event.code == "CapsLock"){
-      a.classList.toggle('capslock');
-     }else if (event.code == "ShiftLeft" || event.code == "ShiftRight"){
+      textarea.value += "    ";
+    } else if (event.code == "CapsLock") {
+      a.classList.toggle("capslock");
+    } else if (event.code == "ShiftLeft" || event.code == "ShiftRight") {
       changeShift(1);
-     }
-// substituting hardware Capslock to virtual one
-let newKey =event.key;
-     console.log(newKey);
-
-     if (event.key != 'Enter'){
-     if(capsLock.classList.contains('capslock')){
-     
-      if (event.code != "Backspace" && event.code != "Tab" && event.code != "CapsLock" && event.code != 'Enter' && event.code != "Space"){  
-        
-        textarea.addEventListener('input', function() {
+    } else if (event.code == "Enter") {
+      event.preventDefault();
+      textarea.value += '\n';
+      resetSpecialKey()
+    }else if (event.code == "Space") {
+      event.preventDefault();
+      textarea.value += ' ';
+      resetSpecialKey()
+    } else if (event.code == "Backspace"){
+      event.preventDefault();
+      textarea.value=textarea.value.substring(0,textarea.value.length -1);
+    resetSpecialKey()
+    }else{
+    // substituting hardware Capslock to virtual one
+    if (document.querySelector('[data-key=Lang]').innerHTML == 'Ru') {
+      textarea.addEventListener("input", function() {
          // console.log(newKey == 'Enter');
-          //textarea.value=textarea.value.substring(0,textarea.value.length -1)+newKey.toUpperCase();
-          
+        textarea.value=textarea.value.substring(0,textarea.value.length -1) + replacerRu[newCode];
        });
-      }
-     }else{
-      
-     if (event.code != "Backspace" && event.code != "Tab" && event.code != "CapsLock" && event.code != 'Enter' && event.code != "Space"){  
-     
-     textarea.addEventListener('input', function() {
-    //  debugger;
-   console.log(newKey);
-   // console.log(event.code);
- 
-      //textarea.value = textarea.value.substring(0,textarea.value.length -1)+newKey.toLowerCase();
-      delete newKey;
-    });
+   } else {
+      textarea.addEventListener("input", function() {
+         console.log(event.keyCode);
+         // console.log(event.code);
+
+        textarea.value = textarea.value.substring(0,textarea.value.length - 1) +  replacerEn[newCode];
+       });
+     }
+   
+
+      if (capsLock.classList.contains("capslock")) {
+         textarea.addEventListener("input", function() {
+            // console.log(newKey == 'Enter');
+            textarea.value=textarea.value.substring(0,textarea.value.length -1) + textarea.value[textarea.value.length -1].toUpperCase();
+          });
+      } else {
+          textarea.addEventListener("input", function() {
+            console.log(newKey);
+            // console.log(event.code);
+
+            textarea.value = textarea.value.substring(0,textarea.value.length -1) + textarea.value[textarea.value.length -1].toLowerCase();
+          });
+        }
+
+       
+    }
+    
   }
-  }
-  }
-}
 });
 
 document.addEventListener('keyup', function(event) {
