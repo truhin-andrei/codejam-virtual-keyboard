@@ -49,7 +49,7 @@ const replacerEn = {
 //   "KeyN":"n" , "KeyM":"m"  , "Comma":"," , "Period":"." , "Slash":"/", 'Lang': 'En'
 // }; 
 
-
+let doubleKeys = new Set();
 
 
 let keyboard = document.createElement('div');
@@ -243,7 +243,19 @@ document.addEventListener("keydown", function() {
     } else if (event.code == "Backspace"){
       event.preventDefault();
       textarea.value=textarea.value.substring(0,textarea.value.length -1);
-    resetSpecialKey()
+      resetSpecialKey()
+    }else if (event.code == "AltLeft" || event.code == "AltRight") {
+      event.preventDefault();
+      doubleKeys.add(event.keyCode);
+      if (doubleKeys.has(17)){
+        changeLang();
+      }
+    }else if ((event.code == "ControlLeft" || event.code == "ControlRight")) {
+      event.preventDefault();
+      doubleKeys.add(event.keyCode);
+      if (doubleKeys.has(18)){
+        changeLang();
+      }
     }else{
       event.preventDefault();  
 if (document.querySelector('[data-key=Lang]').innerHTML == 'Ру') {
@@ -273,6 +285,8 @@ document.addEventListener('keyup', function(event) {
     if (event.code == "ShiftLeft" || event.code == "ShiftRight"){
       changeShift(0);
      }
+
+     doubleKeys.delete(event.keyCode);
   }
 });
 
