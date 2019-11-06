@@ -182,7 +182,7 @@ const doubleKeys = new Set();
 const keyboard = document.createElement('div');
 keyboard.className = 'keyboard';
 
-for (item in keys) {
+for (const item in keys) {
   const key = document.createElement('div');
   key.className = 'key';
   if (
@@ -208,14 +208,14 @@ container.append(keyboard);
 const capsLock = document.querySelector('[data-key=CapsLock]');
 
 function changeKeys(obj) {
-  for (let item in obj) {
+  for (const item in obj) {
     const elem = document.querySelector(`[data-key=${item}]`);
     elem.innerHTML = obj[item];
   }
 }
 
 function changeKeyCase(up) {
-  for (item in keys) {
+  for (const item in keys) {
     if (up) {
       if (
         item.includes('Key')
@@ -279,6 +279,7 @@ if (localStorage.Lang === 'Ru') {
 }
 
 keyboard.addEventListener('mousedown', () => {
+  console.log(textarea.selectionStart);
   if (event.target.dataset.key) {
     const a = document.querySelector(
       `[data-key=${event.target.dataset.key}]`,
@@ -291,6 +292,24 @@ keyboard.addEventListener('mousedown', () => {
     } else if (event.target.innerHTML === 'Tab') {
       event.preventDefault();
       textarea.value += '    ';
+      resetSpecialKey();
+    } else if (event.target.dataset.key === 'ArrowLeft') {
+      event.preventDefault();
+      textarea.selectionStart--;
+      textarea.selectionEnd--;
+      resetSpecialKey();
+    } else if (event.target.dataset.key === 'ArrowRight') {
+      event.preventDefault();
+      textarea.selectionStart++;
+      textarea.selectionEnd++;
+      resetSpecialKey();
+    } else if (event.target.dataset.key === 'ArrowUp' || event.target.dataset.key === 'ArrowDown') {
+      event.preventDefault();
+      resetSpecialKey();
+    } else if (event.target.dataset.key === 'Delete') {
+      event.preventDefault();
+      textarea.selectionEnd++;
+      document.getSelection().deleteFromDocument();
       resetSpecialKey();
     } else if (event.target.innerHTML === 'Enter') {
       textarea.value += '\n';
@@ -386,11 +405,8 @@ keyboard.addEventListener('mouseup', () => {
     textarea.focus();
   }
 });
-let newCode;
-document.addEventListener('keydown', () => {
-  const newKey = event.key;
-  newCode = event.keyCode;
 
+document.addEventListener('keydown', () => {
   if (event.code) {
     textarea.focus();
     const a = document.querySelector(`[data-key=${event.code}]`);
@@ -428,9 +444,9 @@ document.addEventListener('keydown', () => {
       if (doubleKeys.has(18)) {
         changeLang();
       }
-    } else {
+    } else if (event.code !== 'Delete' && !(event.code).includes('Arrow')) {
       event.preventDefault();
-      if (document.querySelector('[data-key=Lang]').innerHTML == 'Ру') {
+      if (document.querySelector('[data-key=Lang]').innerHTML === 'Ру') {
         textarea.value = replacerRu[event.code]
           ? textarea.value.substring(0, textarea.value.length)
             + replacerRu[event.code]
